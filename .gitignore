@@ -1,0 +1,68 @@
+# Python cache ve derlenmiş dosyaları
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Sanal ortam klasörleri
+venv/
+env/
+.venv/
+*/venv/
+*/env/
+*/.venv/
+
+# Python paketleme ve kurulum artıkları
+*.egg-info/
+dist/
+build/
+wheels/
+*.egg
+
+# Hassas Bilgiler ve Ortam Değişkenleri
+# API anahtarları gibi gizli bilgileri ASLA commit'lemeyin!
+.env
+*.env
+.env.*
+
+# Üretilen Vektör Veritabanları ve Koleksiyonlar
+# Bu klasörler `create_vector_store.py` gibi betiklerle yeniden oluşturulur ve çok büyük olabilir.
+rag_collections/
+
+# Log Dosyaları
+# Bu dosyalar çalışma zamanında üretilir ve repo geçmişinde yer almamalıdır.
+*.log
+rag_data_generation.log
+logs/
+
+# Eğitim Videoları ve Diğer Medya Dosyaları
+# Büyük medya dosyaları Git için uygun değildir. Bunları ayrı bir depolama çözümünde tutun.
+*.mp4
+*.mp3
+*.mov
+*.avi
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# İşletim Sistemine ve Editöre Özel Dosyalar
+# Bu dosyalar sadece sizin yerel makineniz için anlamlıdır.
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editör yapılandırma dosyaları
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Geçici dosyalar
+*~
+*.swp
+*.swo
+
+# ChromaDB veritabanı dosyası (eğer ana dizinde oluşursa)
+chroma.sqlite3
+*.sqlite3
