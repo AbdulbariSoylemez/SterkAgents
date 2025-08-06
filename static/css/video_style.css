@@ -139,6 +139,26 @@ video {
     z-index: 5;
     border-radius: 8px;
     margin: 10px 10px 10px 0;
+    transition: width 0.3s ease, min-width 0.3s ease;
+}
+
+/* Hamburger menü için daraltılmış sidebar stili */
+.video-sidebar.collapsed {
+    width: 60px;
+    min-width: 60px;
+}
+
+.video-sidebar.collapsed .sidebar-header .course-title,
+.video-sidebar.collapsed .sidebar-header .logout-btn,
+.video-sidebar.collapsed .progress-container,
+.video-sidebar.collapsed .tabs,
+.video-sidebar.collapsed .tab-content {
+    display: none;
+}
+
+.video-sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    padding: 10px;
 }
 
 .sidebar-header {
@@ -217,6 +237,7 @@ video {
     position: relative;
     margin-top: 10px;
     margin-bottom: 10px;
+    --clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
 }
 
 .progress-circle::before {
@@ -228,7 +249,7 @@ video {
     height: 100%;
     border-radius: 50%;
     border: 3px solid var(--success-green);
-    clip-path: none; /* Will be set dynamically via JavaScript */
+    clip-path: var(--clip-path); /* CSS değişkeni kullanarak JavaScript ile dinamik olarak güncellenecek */
 }
 
 .progress-circle span {
@@ -318,6 +339,8 @@ video {
     padding: 0;
     margin: 0;
     counter-reset: lesson-counter;
+    max-height: 65vh;
+    overflow-y: auto;
 }
 
 .module-item {
@@ -368,7 +391,10 @@ video {
 
 .section-list {
     list-style: none;
-    margin-left: 16px;
+    margin-left: 0;
+    padding-left: 0;
+    max-height: 60vh;
+    overflow-y: auto;
 }
 
 .section-item {
@@ -379,9 +405,10 @@ video {
     justify-content: space-between;
     cursor: pointer;
     position: relative;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
     border-bottom: 1px solid var(--border-color);
     font-size: 14px;
+    word-break: break-word;
 }
 
 .section-item:hover {
@@ -419,8 +446,12 @@ video {
 }
 
 .section-item.completed::before {
-    content: '✔️';
+    content: '\f00c'; /* FontAwesome check icon */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     color: var(--success-green);
+    opacity: 1;
+    font-size: 14px;
 }
 
 .section-item.current::before {
@@ -429,6 +460,9 @@ video {
 }
 
 .section-item.current:not(.header)::before {
+    content: '\f04b'; /* FontAwesome play icon (V şekli) */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     color: white;
 }
 
@@ -698,50 +732,51 @@ video {
     transform: scale(0.95);
 }
 
-.typing-indicator {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background-color: var(--bg-tertiary);
-    border-radius: 12px;
-    border-bottom-left-radius: 4px;
-    align-self: flex-start;
-    margin-top: 8px;
-}
-
-.typing-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--text-secondary);
-    border-radius: 50%;
-    margin-right: 4px;
-    animation: blink 1.4s infinite both;
-}
-
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+/* Bu stil sınıfları kullanılmadığı için kaldırıldı */
 
 @keyframes blink {
     0%, 100% { opacity: 0.2; }
     50% { opacity: 1; }
 }
 
-.copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-size: 14px;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+/* Chatbot yükleniyor animasyonu */
+.chat-loading {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
 }
 
-.copy-btn:hover {
-    opacity: 1;
+.chat-loading-dots {
+    display: flex;
+    align-items: center;
 }
+
+.chat-loading-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-secondary);
+    margin: 0 2px;
+    animation: chatBlink 1.4s infinite ease-in-out both;
+}
+
+.chat-loading-dot:nth-child(1) { animation-delay: 0s; }
+.chat-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.chat-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chatBlink {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+.thinking {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-right: 8px;
+    font-style: italic;
+}
+
+/* Bu stil sınıfları kullanılmadığı için kaldırıldı */
 
 .video-loading {
     position: absolute;
@@ -750,22 +785,43 @@ video {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
     font-size: 18px;
+    z-index: 10;
 }
 
-.video-loading::after {
-    content: '';
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.loading-spinner i {
+    font-size: 24px;
+    margin-right: 12px;
     animation: spin 1s linear infinite;
-    margin-left: 12px;
+}
+
+.loading-progress {
+    width: 80%;
+    max-width: 400px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: var(--accent-blue);
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
 }
 
 @keyframes spin {
@@ -794,54 +850,7 @@ video {
     color: var(--accent-blue);
 }
 
-.error-message {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-primary);
-    z-index: 9999;
-}
-
-.error-message i {
-    font-size: 64px;
-    color: var(--error-red);
-    margin-bottom: 24px;
-}
-
-.error-message h3 {
-    font-size: 24px;
-    margin-bottom: 16px;
-}
-
-.error-message p {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-    text-align: center;
-    max-width: 500px;
-}
-
-.error-message button {
-    background-color: var(--accent-blue);
-    border: none;
-    border-radius: 6px;
-    padding: 12px 24px;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.error-message button:hover {
-    background-color: var(--accent-blue-dark);
-}
+/* Bu stil sınıfları HTML şablonlarında kullanılmadığı için kaldırıldı */
 
 @media (max-width: 992px) {
     .video-container {

@@ -21,9 +21,15 @@
     <div class="video-main-container">
         <div class="video-container">
         <div class="video-loading" id="video-loading">
-            Video yükleniyor...
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Video yükleniyor...</span>
+            </div>
+            <div class="loading-progress" id="loading-progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
         </div>
-        <video id="video-player" controls style="display: none;">
+        <video id="video-player" controls style="display: none;" preload="auto" playsinline muted>
             <source src="" type="video/mp4">
             Tarayıcınız video etiketini desteklemiyor.
         </video>
@@ -31,7 +37,7 @@
     
     <div class="video-sidebar">
         <div class="sidebar-header">
-            <button class="hamburger-menu" id="hamburger-menu">
+            <button class="hamburger-menu" id="hamburger-menu" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
             <h2 class="course-title" id="course-title">Cursor ile Yazılım Geliştirme</h2>
@@ -61,34 +67,10 @@
         
         <div class="tab-content active" id="tab-icerik">
             <ul class="module-list" id="module-list">
-                <!-- Static content for design purposes, will be replaced by JS -->
-                <!-- Static content will be replaced by JS with actual video data -->
-                <!-- Header shows course title and total duration -->
-                <li class="section-item header">
-                    <span class="section-title">Cursor ile Yazılım Geliştirme</span>
-                    <span class="section-duration">48d 55sn</span>
-                </li>
-                <!-- Video items with original filenames as titles -->
-                <li class="section-item completed">
-                    <span class="section-title">01_Cursor_Introduction</span>
-                    <span class="section-duration">10d 25sn</span>
-                </li>
-                <li class="section-item current">
-                    <span class="section-title">02_AI_Assisted_Coding</span>
-                    <span class="section-duration">12d 40sn</span>
-                </li>
-                <li class="section-item">
-                    <span class="section-title">03_Debugging_and_Optimization</span>
-                    <span class="section-duration">9d 50sn</span>
-                </li>
-                <li class="section-item">
-                    <span class="section-title">04_Cursor_in_Large_Projects</span>
-                    <span class="section-duration">8d 15sn</span>
-                </li>
-                <li class="section-item">
-                    <span class="section-title">05_Advanced_Features</span>
-                    <span class="section-duration">7d 45sn</span>
-                </li>
+                <!-- Video içerikleri JavaScript tarafından dinamik olarak yüklenecek -->
+                <div class="video-loading" style="padding: 20px; text-align: center;">
+                    <i class="fas fa-spinner fa-spin"></i> <span id="loading-text">İçerikler yükleniyor...</span>
+                </div>
             </ul>
         </div>
         
@@ -135,13 +117,8 @@
 
     <script>
         // Video loading functionality
-        const videoPlayer = document.getElementById("video-player");
-        const videoLoading = document.getElementById("video-loading");
-        
-        videoPlayer.addEventListener('loadeddata', function() {
-            videoLoading.style.display = 'none';
-            videoPlayer.style.display = 'block';
-        });
+        // Not: Bu event listener egitim.js dosyasında zaten var ve daha kapsamlı işlemler yapıyor
+        // Bu nedenle buradaki event listener kaldırıldı
 
         // Navbar logo/isim tıklanınca ana sayfa
         document.addEventListener('DOMContentLoaded', function() {
@@ -166,6 +143,35 @@
         // Çıkış butonu
         document.getElementById('logout-btn').addEventListener('click', function() {
             window.location.href = '/';
+        });
+        
+        // Hamburger menü işlevi
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.video-sidebar');
+            sidebar.classList.toggle('collapsed');
+            
+            // Sidebar durumunu localStorage'a kaydet
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebar_collapsed', isCollapsed);
+            
+            // Video container boyutunu ayarla
+            const videoContainer = document.querySelector('.video-container');
+            if (isCollapsed) {
+                videoContainer.style.flex = '5';
+            } else {
+                videoContainer.style.flex = '3';
+            }
+        }
+        
+        // Sayfa yüklendiğinde önceki sidebar durumunu kontrol et
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.video-sidebar');
+            const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+            
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                document.querySelector('.video-container').style.flex = '5';
+            }
         });
     </script>
     <script src="/static/js/egitim.js"></script>

@@ -62,15 +62,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             
             // Karta tıklanınca video sayfasına yönlendir
-            card.addEventListener('click', async () => {
+            card.addEventListener('click', () => {
                 try {
-                    // Video URL'ini kontrol et
-                    const videoPath = video.video_url.startsWith('/') ? video.video_url.slice(1) : video.video_url;
-                    if (!await checkFileExists(videoPath)) {
-                        alert("Video dosyası bulunamadı!");
-                        return;
-                    }
-                    
                     // Debug: Video bilgilerini yazdır
                     console.log("Tıklanan video:", {
                         id: video.id,
@@ -79,14 +72,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                         series_videos_count: video.series_videos_data?.length || 0
                     });
                     
-                    // Video sayfasına yönlendir
+                    // Video sayfasına doğrudan yönlendir (dosya kontrolü yapmadan)
                     const url = `video_page.html?id=${encodeURIComponent(video.id)}`;
                     console.log("Yönlendirme URL:", url);
+                    console.log("Video ID:", video.id);
+                    
+                    // Debug: Tüm video verilerini yazdır
+                    console.log("Video detayları:", JSON.stringify(video, null, 2));
+                    
+                    // Sayfayı yönlendir
                     window.location.href = url;
                     
                 } catch (error) {
-                    console.error("Video kontrolü sırasında hata:", error);
-                    alert("Video kontrol edilirken bir hata oluştu!");
+                    console.error("Yönlendirme sırasında hata:", error);
+                    alert("Sayfaya yönlendirme sırasında bir hata oluştu!");
                 }
             });
             
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Dosya varlığını kontrol et
+// NOT: Bu fonksiyon artık kullanılmıyor, ancak gelecekte gerekebilir diye tutuyoruz
 async function checkFileExists(path) {
     try {
         const response = await fetch(path, { method: 'HEAD' });
