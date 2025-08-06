@@ -10,6 +10,7 @@ import dotenv
 from slugify import slugify
 from functools import lru_cache
 from moviepy.editor import VideoFileClip
+from urllib.parse import quote
 
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
@@ -93,6 +94,7 @@ def create_video_list() -> List[Dict[str, Any]]:
         course_name = course_dir.name
         course_id = f"course_{slugify(course_name)}"
         collection_name = course_name.lower().replace(" ", "_")
+        encoded_course_name = quote(course_name)
 
         video_files = sorted(
             [p for p in course_dir.glob("**/*.mp4") if p.is_file()],
@@ -101,7 +103,11 @@ def create_video_list() -> List[Dict[str, Any]]:
         
         is_series = len(video_files) > 1
         thumbnail_files = list(course_dir.glob("**/*.jpg")) + list(course_dir.glob("**/*.png"))
-        thumbnail = f"/Education_video/{course_name}/{thumbnail_files[0].name}" if thumbnail_files and len(thumbnail_files) > 0 else None
+        if thumbnail_files and len(thumbnail_files) > 0:
+            encoded_thumbnail_name = quote(thumbnail_files[0].name)
+            thumbnail = f"/Education_video/{encoded_course_name}/{encoded_thumbnail_name}"
+        else:
+            thumbnail = None
 
         course_info = {
             "id": course_id,
@@ -114,7 +120,9 @@ def create_video_list() -> List[Dict[str, Any]]:
 
         if video_files:
             main_video = video_files[0]
-            video_path_url = f"/Education_video/{course_name}/{main_video.name}"
+            # Properly encode the video URL for Turkish characters and spaces
+            encoded_video_name = quote(main_video.name)
+            video_path_url = f"/Education_video/{encoded_course_name}/{encoded_video_name}"
             course_info["video_url"] = video_path_url
             if thumbnail:
                 course_info["thumbnail"] = thumbnail
@@ -124,7 +132,9 @@ def create_video_list() -> List[Dict[str, Any]]:
             
             for idx, video_file in enumerate(video_files):
                 video_name = video_file.stem
-                video_path = f"/Education_video/{course_name}/{video_file.name}"
+                # Properly encode the video path for Turkish characters and spaces
+                encoded_video_name = quote(video_file.name)
+                video_path = f"/Education_video/{encoded_course_name}/{encoded_video_name}"
                 full_path = str(video_file.resolve())
                 
                 duration_seconds, duration = get_video_duration(full_path)
