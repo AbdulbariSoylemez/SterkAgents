@@ -1,4 +1,4 @@
-# SterkAgents - Video Eğitim RAG Platformu
+# SterkAgents - Video Eğitim RAG Platformu --> http://www.trendizayn.com/
 
 SterkAgents, eğitim videolarını işleyerek Retrieval Augmented Generation (RAG) tabanlı bir asistan oluşturan modern bir eğitim platformudur. Kullanıcılar, eğitim videolarını izlerken içerikle ilgili sorular sorabilir ve gerçek zamanlı yanıtlar alabilirler.
 
